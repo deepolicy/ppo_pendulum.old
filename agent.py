@@ -136,7 +136,7 @@ class Agent():
 
         None, 
 
-        {'act': [array([[0.5577679]], dtype=float32)], 'value': array([[-0.15849566]], dtype=float32), 'neglogpacs': [array([0.99973834], dtype=float32)]}, 
+        {'act': [array([[0.5577679]], dtype=float32)], 'value': array([-0.15849566], dtype=float32), 'neglogpacs': [array([0.99973834], dtype=float32)]}, 
 
         -2.8712233299991724e-05, 
 
@@ -153,12 +153,12 @@ class Agent():
 
         mb_rewards = [i[-2] for i in sample_data[:nsteps]]
         mb_dones = [i[-1] for i in sample_data[:nsteps]]
-        mb_values = [i[2]['value'][0][0] for i in sample_data[:nsteps]]
+        mb_values = [i[2]['value'][0] for i in sample_data[:nsteps]]
 
         lam = 0.95
         gamma = 0.98
 
-        last_values = sample_data[nsteps][2]['value'][0][0]
+        last_values = sample_data[nsteps][2]['value'][0]
 
         last_done = sample_data[nsteps][-1]
 
