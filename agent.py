@@ -152,7 +152,7 @@ class Agent():
         # get mb_advs and mb_returns
 
         mb_rewards = [i[-2] for i in sample_data[:nsteps]]
-        mb_dones = [i[-1] for i in sample_data[:nsteps]]
+        mb_dones = [False] + [i[-1] for i in sample_data[:nsteps]][:-1]
         mb_values = [i[2]['value'][0] for i in sample_data[:nsteps]]
 
         lam = 0.95
@@ -160,7 +160,7 @@ class Agent():
 
         last_values = sample_data[nsteps][2]['value'][0]
 
-        last_done = sample_data[nsteps][-1]
+        last_done = sample_data[nsteps-1][-1]
 
         # discount/bootstrap off value fn
         mb_returns = np.zeros_like(mb_rewards)
