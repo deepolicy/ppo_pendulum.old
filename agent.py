@@ -131,7 +131,6 @@ class Agent():
         array = np.array
         float32 = np.float32
         
-        
         [array([ 0.10714442,  0.99424347, -0.06181507]), 
 
         None, 
@@ -142,8 +141,6 @@ class Agent():
 
         False]
 
-
-
         mb_obs = [i[0] for i in sample_data[:nsteps]]
         mb_actions = [i[2]['act'][0][0] for i in sample_data[:nsteps]]
         mb_neglogpacs = [i[2]['neglogpacs'][0][0] for i in sample_data[:nsteps]]
@@ -152,7 +149,7 @@ class Agent():
         # get mb_advs and mb_returns
 
         mb_rewards = [i[-2] for i in sample_data[:nsteps]]
-        mb_dones = [False] + [i[-1] for i in sample_data[:nsteps]][:-1]
+        mb_dones = [i[-1] for i in sample_data[:nsteps]]
         mb_values = [i[2]['value'][0] for i in sample_data[:nsteps]]
 
         lam = 0.95
@@ -160,19 +157,16 @@ class Agent():
 
         last_values = sample_data[nsteps][2]['value'][0]
 
-        last_done = sample_data[nsteps-1][-1]
-
         # discount/bootstrap off value fn
         mb_returns = np.zeros_like(mb_rewards)
         mb_advs = np.zeros_like(mb_rewards)
         lastgaelam = 0
         for t in reversed(range(nsteps)):
             if t == nsteps - 1:
-                nextnonterminal = 1.0 - last_done
                 nextvalues = last_values
             else:
-                nextnonterminal = 1.0 - mb_dones[t+1]
                 nextvalues = mb_values[t+1]
+            nextnonterminal = 1.0 - mb_dones[t]
             delta = mb_rewards[t] + gamma * nextvalues * nextnonterminal - mb_values[t]
             mb_advs[t] = lastgaelam = delta + gamma * lam * nextnonterminal * lastgaelam
         mb_returns = mb_advs + mb_values
